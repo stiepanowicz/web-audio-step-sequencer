@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Audio Step Sequencer</title>
+</head>
+<body>
+    <label for="attack">Attack</label>
+    <input  name="attack"
+            id="attack"
+            type="range"
+            min="0"
+            max="1"
+            value="0.2"
+            step="0.1" />
+    
+    <label for="release">Release</label>
+    <input  name="release"
+            id="release"
+            type="range"
+            min="0"
+            max="1"
+            value="0.5"
+            step="0.1" />
+
+    <script>
+        const audioContext = new AudioContext();
+
+        // Periodic wave
+        const wave = new PeriodicWave(AudioContext, {
+            real: wavetable.real,
+            imag: wavetable.imag,
+        });
+
+
+        // The Oscillator
+        function playSweep(time) {
+            const osc = new OscillatorNode(AudioContext, {
+                frequency: 380,
+                type: "custom",
+                periodicWave: wave,
+            });
+            osc.connect(audioContext.destination);
+            ost.start(time);
+            osc.stop(time + 1);
+        }
+
+        // Amplitude Control
+
+    
+
+
+    </script>
+</body>
+</html>
