@@ -183,8 +183,8 @@
 
         // noise user controls
         let noiseDuration = 1;
-        const durControl = document.querySelector("#duration");
-        durControl.addEventListener(
+        const durationControl = document.querySelector("#duration");
+        durationControl.addEventListener(
             "input",
             (ev) => {
                 noiseDuration = parseFloat(ev.target.value);
@@ -201,13 +201,38 @@
             },
             false,
         );
-    
+
+        // loading the sample
+        async function getFile(audioContext, filepath) {
+            const response = await fetch(filepath);
+            const arrayBuffer = await response.arrayBuffer();
+            const audioBuffer = await
+        audioContext.decodeAudioData(arrayBuffer);
+            return audioBuffer;
+        }
+
+        async function setupSample() {
+            const filePath = "dtmf.mp3";
+            const sample = await getFile(audioContext, filePath);
+            return sample;
+        }
+        
+        function playSample(audioContext, audioBuffer, time) {
+            const sampleSource = new AudioBufferSourceNode(audioContext, {
+                buffer: audioBuffer,
+                playbackRate,
+        });
+        sampleSource.connect(audioContext.destination);
+        sampleSource.start(time);
+        return sampleSource;
+        }
+
         // connecting the graph
         lfo.connect(amp.gain);
         osc.connect(amp).connect(audioContext.destination);
-        lfo.start();
-        osc.start(time);
-        osc.stop(time + pulseTime);
+        // lfo.start();
+        // osc.start(time);
+        // osc.stop(time + pulseTime);
     </script>
 </body>
 </html>
